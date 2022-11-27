@@ -41,6 +41,7 @@ ships <- ships %>%
 # join bird and ship data together in to one table
 bird_obs <- left_join(birds, ships, by = "record_id")
   
-
+# write data to clean data folder
+write_csv(bird_obs, "data_clean/bird_obs.csv")
 
 
