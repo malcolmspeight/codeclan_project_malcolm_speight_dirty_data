@@ -2,11 +2,6 @@ library(tidyverse)
 library(readxl)
 library(janitor)
 
-glimpse(birds)
-view(birds)
-glimpse(ships)
-view(ships)
-
 ## Bird data
 # read in bird data and clean variable names
 birds <- read_excel("data_raw/seabirds.xls", sheet = "Bird data by record ID") %>% 

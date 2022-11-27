@@ -2,11 +2,6 @@ library(tidyverse)
 library(readxl)
 library(janitor)
 
-glimpse(birds)
-view(birds)
-glimpse(ships)
-view(ships)
-
 ## Bird data
 # read in bird data and clean variable names
 birds <- read_excel("data_raw/seabirds.xls", sheet = "Bird data by record ID") %>% 
@@ -42,6 +37,6 @@ ships <- ships %>%
 bird_obs <- left_join(birds, ships, by = "record_id")
   
 # write data to clean data folder
-write_csv(birds_obs, "data_clean/bird_obs.csv")
+write_csv(bird_obs, "data_clean/bird_obs.csv")
 
 
