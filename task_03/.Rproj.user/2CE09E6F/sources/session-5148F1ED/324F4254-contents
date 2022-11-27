@@ -39,7 +39,7 @@ ships <- ships %>%
          longitude = coalesce(longitude, 0))
 
 # join bird and ship data together in to one table
-bird
+bird_obs <- left_join(birds, ships, by = "record_id")
   
 
 
