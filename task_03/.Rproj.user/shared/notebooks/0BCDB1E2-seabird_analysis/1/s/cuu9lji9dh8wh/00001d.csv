@@ -1,5 +1,0 @@
-"0","seabirds %>% "
-"0","  group_by(common_name, scientific_name, species_abbreviation) %>% "
-"0","  summarise(sightings = n()) %>% "
-"0","  arrange(desc(sightings)) %>% "
-"0","  head(1)"

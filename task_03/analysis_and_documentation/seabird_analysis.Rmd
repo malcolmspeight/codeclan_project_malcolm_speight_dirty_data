@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 options(dplyr.summarise.inform = FALSE)    # suppress "summarise has" grouped output message
 library(here)
-here::here()
+
 seabirds <- read_csv(here("data_clean/bird_obs.csv"))
 ```
 
