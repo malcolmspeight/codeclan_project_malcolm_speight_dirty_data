@@ -5,12 +5,13 @@ date: "2022-11-28"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
+```{r include = FALSE}
 library(tidyverse)
+options(dplyr.summarise.inform = FALSE)    # suppress summarise has grouped output message
 library(here)
 here::here()
 seabirds <- read_csv(here("data_clean/bird_obs.csv"))
@@ -53,7 +54,6 @@ anti_join(seabirds, birds_seen_in_groups, by = "common_name") %>%
   filter(bird_count == 1) %>% 
   distinct() %>% 
   summarise("seabird types" = n())
-
 ```
 
 ```{r}
@@ -64,6 +64,7 @@ seabirds %>%
   filter(penguin_detect) %>% 
   summarise("penguin_sightings" = sum(bird_count))
 ```
+
 
 
 

@@ -1,4 +1,5 @@
 "0","library(tidyverse)"
+"0","options(dplyr.summarise.inform = FALSE)    # Change global options"
 "0","library(here)"
 "0","here::here()"
 "1","[1]"
