@@ -1,0 +1,16 @@
+"0","library(tidyverse)"
+"0","library(here)"
+"0","here::here()"
+"1","[1]"
+"1"," ""/Users/malcolmspeight/Documents/Malcolm/CodeClan/codeclan_project_malcolm_speight_dirty_data/task_03"""
+"1","
+"
+"0","seabirds <- read_csv(here(""data_clean/bird_obs.csv""))"
+"2","[1mRows: [22m[34m49019[39m [1mColumns: [22m[34m7[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m─────────────────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (3): common_name, scientific_name, species_abbreviation
+[32mdbl[39m (4): record_id, bird_count, latitude, longitude"
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."

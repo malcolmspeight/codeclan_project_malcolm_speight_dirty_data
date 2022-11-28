@@ -1,2 +1,0 @@
-"0","library(tidyverse)"
-"0","seabirds <- read.csv(""data_clean/bird_obs.csv"")"
