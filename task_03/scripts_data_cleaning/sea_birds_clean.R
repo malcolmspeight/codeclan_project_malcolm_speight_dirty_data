@@ -18,8 +18,6 @@ birds <- birds %>%
 birds <- birds %>% 
   mutate(bird_count = coalesce(bird_count, 0))
 
-glimpse(birds)
-
 ## Ship data
 # read in ship data and clean variable names
 ships <- read_excel("data_raw/seabirds.xls", sheet = "Ship data by record ID") %>% 

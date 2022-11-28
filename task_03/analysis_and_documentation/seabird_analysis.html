@@ -357,18 +357,30 @@ display: none;
 </div>
 
 
+<p><br /></p>
+<div id="question-1." class="section level5">
+<h5><strong>Question 1.</strong></h5>
+<p>The question asks to find the bird species that was sighted most
+frequently, regardless of the number of birds actually counted</p>
+<p>The Wandering albatross sensu lato PL2 is the most frequently sighted
+bird. <br /></p>
 <pre class="r"><code>seabirds %&gt;% 
-  filter(bird_count == 1) %&gt;% 
   group_by(common_name, scientific_name, species_abbreviation) %&gt;% 
-  summarise(sightings = sum(bird_count)) %&gt;% 
+  summarise(sightings = n()) %&gt;% 
   arrange(desc(sightings)) %&gt;% 
   head(1)</code></pre>
 <pre><code>## # A tibble: 1 × 4
 ## # Groups:   common_name, scientific_name [1]
 ##   common_name                        scientific_name             speci…¹ sight…²
-##   &lt;chr&gt;                              &lt;chr&gt;                       &lt;chr&gt;     &lt;dbl&gt;
-## 1 Wandering albatross sensu lato PL3 Diomedea antipodensis / ex… DIOANT…    1707
+##   &lt;chr&gt;                              &lt;chr&gt;                       &lt;chr&gt;     &lt;int&gt;
+## 1 Wandering albatross sensu lato PL2 Diomedea antipodensis / ex… DIOANT…    3104
 ## # … with abbreviated variable names ¹​species_abbreviation, ²​sightings</code></pre>
+<p><br /></p>
+</div>
+<div id="question-2." class="section level5">
+<h5><strong>Question 2.</strong></h5>
+<p>The bird with the highest total count is the Short-tailed shearwater.
+<br /></p>
 <pre class="r"><code>seabirds %&gt;% 
   group_by(common_name, scientific_name, species_abbreviation) %&gt;% 
   summarise(sightings = sum(bird_count)) %&gt;% 
@@ -379,6 +391,12 @@ display: none;
 ##   common_name             scientific_name       species_abbreviation sightings
 ##   &lt;chr&gt;                   &lt;chr&gt;                 &lt;chr&gt;                    &lt;dbl&gt;
 ## 1 Short-tailed shearwater Puffinus tenuirostris PUFTEN                  982553</code></pre>
+<p><br /></p>
+</div>
+<div id="question-3." class="section level5">
+<h5><strong>Question 3.</strong></h5>
+<p>As per Question 2 but for sightings above a latitude of -30 degrees,
+the Wedge-tailed shearwater has the highest count. <br /></p>
 <pre class="r"><code>seabirds %&gt;% 
   filter(latitude &gt; -30) %&gt;% 
   group_by(common_name, scientific_name, species_abbreviation) %&gt;% 
@@ -390,6 +408,16 @@ display: none;
 ##   common_name             scientific_name    species_abbreviation sightings
 ##   &lt;chr&gt;                   &lt;chr&gt;              &lt;chr&gt;                    &lt;dbl&gt;
 ## 1 Wedge-tailed shearwater Puffinus pacificus PUFPAC                     855</code></pre>
+<p><br /></p>
+</div>
+<div id="question-4." class="section level5">
+<h5><strong>Question 4.</strong></h5>
+<p>Selecting those birds that had been sighted in groups allowed the
+birds who had only ever been sighted on their own to be isolated in the
+main <code>seabirds</code> table, as they didn’t occur in the
+<code>birds_seen_in_groups</code> table. <br /></p>
+<p>229 different types of bird were only ever sighted on their own.
+<br /></p>
 <pre class="r"><code>birds_seen_in_groups &lt;- seabirds %&gt;% 
   filter(bird_count &gt; 1)
 
@@ -401,6 +429,13 @@ anti_join(seabirds, birds_seen_in_groups, by = &quot;common_name&quot;) %&gt;%
 ##   `seabird types`
 ##             &lt;int&gt;
 ## 1             229</code></pre>
+<p><br /></p>
+</div>
+<div id="question-5." class="section level5">
+<h5><strong>Question 5.</strong></h5>
+<p>The different types of penguin were identified by looking for the
+word ‘penguin’ anywhere in the birds common name. <br /></p>
+<p>There were 154 sightings of penguin. <br /></p>
 <pre class="r"><code>pattern &lt;- &quot;penguin&quot;
 
 seabirds %&gt;%
@@ -411,6 +446,7 @@ seabirds %&gt;%
 ##   penguin_sightings
 ##               &lt;dbl&gt;
 ## 1               154</code></pre>
+</div>
 
 
 

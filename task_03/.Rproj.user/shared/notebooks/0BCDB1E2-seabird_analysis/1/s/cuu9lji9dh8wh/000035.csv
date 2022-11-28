@@ -1,7 +1,0 @@
-"0","seabirds %>% "
-"0","  filter(bird_count == 1) %>% "
-"0","  group_by(common_name, scientific_name, species_abbreviation) %>% "
-"0","  summarise(sightings = sum(bird_count)) %>% "
-"0","  arrange(desc(sightings)) %>% "
-"0","  head(1)"
-"2","`summarise()` has grouped output by 'common_name', 'scientific_name'. You can override using the `.groups` argument."
