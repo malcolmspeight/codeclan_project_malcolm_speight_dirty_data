@@ -416,8 +416,6 @@ the Wedge-tailed shearwater has the highest count. <br /></p>
 birds who had only ever been sighted on their own to be isolated in the
 main <code>seabirds</code> table, as they didn’t occur in the
 <code>birds_seen_in_groups</code> table. <br /></p>
-<p>229 different types of bird were only ever sighted on their own.
-<br /></p>
 <pre class="r"><code>birds_seen_in_groups &lt;- seabirds %&gt;% 
   filter(bird_count &gt; 1)
 
@@ -434,9 +432,9 @@ anti_join(seabirds, birds_seen_in_groups, by = &quot;common_name&quot;) %&gt;%
 <div id="question-5." class="section level5">
 <h5><strong>Question 5.</strong></h5>
 <p>The different types of penguin were identified by looking for the
-word ‘penguin’ anywhere in the birds common name. <br /></p>
-<p>There were 154 sightings of penguin. <br /></p>
-<pre class="r"><code>pattern &lt;- &quot;penguin&quot;
+word ‘penguin’ (be it upper or lower case) anywhere in the birds common
+name. <br /></p>
+<pre class="r"><code>pattern &lt;- &quot;(?i)penguin&quot;
 
 seabirds %&gt;%
   mutate(penguin_detect = str_detect(common_name, pattern)) %&gt;% 
@@ -445,7 +443,7 @@ seabirds %&gt;%
 <pre><code>## # A tibble: 1 × 1
 ##   penguin_sightings
 ##               &lt;dbl&gt;
-## 1               154</code></pre>
+## 1               158</code></pre>
 </div>
 
 
