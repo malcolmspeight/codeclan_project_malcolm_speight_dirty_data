@@ -26,8 +26,13 @@ candy_2015 <- candy_2015 %>%
 candy_2015 <- candy_2015 %>% 
   mutate(age = as.numeric(age)) %>% # force age to be numeric
   filter(!is.na(age)) %>% # remove rows with non-numeric age value 
-  filter(age >= 1 & age <= 100) # remove rows where age 
+  filter(age >= 1 & age <= 100) # remove rows where age is ridiculous
   
+
+candy_2015 <- candy_2015 %>% 
+  pivot_longer(cols = 4:97,
+               names_to = "candy",
+               values_to = "feeling")
 
 view(candy_2015)
 glimpse(candy_2015)
