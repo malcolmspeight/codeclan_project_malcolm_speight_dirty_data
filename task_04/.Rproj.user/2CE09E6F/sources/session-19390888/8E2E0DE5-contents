@@ -11,6 +11,9 @@ candy_2015 <- read_excel("data_raw/boing-boing-candy-2015.xlsx") %>%
   select(1:96, 115) %>% # remove unwanted columns
   clean_names() 
 
+# extract year from timestamp column
+candy_2015 <- candy_2015 %>% 
+  mutate(year = str_sub(timestamp, start = 1, end = 4), .before = timestamp)
 
 
 
