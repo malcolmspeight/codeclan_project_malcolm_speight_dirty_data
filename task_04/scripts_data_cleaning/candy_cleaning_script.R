@@ -2,6 +2,9 @@ library(tidyverse)
 library(readxl)
 library(janitor)
 
+view(candy_2015)
+glimpse(candy_2015)
+
 ## 2015 data
 # read in data and clean variable names
 candy_2015 <- read_excel("data_raw/boing-boing-candy-2015.xlsx") %>% 
@@ -24,17 +27,22 @@ candy_2015 <- candy_2015 %>%
 
 ## age
 candy_2015 <- candy_2015 %>% 
-  mutate(age = as.numeric(age)) %>% # force age to be numeric
-  filter(!is.na(age)) %>% # remove rows with non-numeric age value 
-  filter(age >= 1 & age <= 100) # remove rows where age is ridiculous
+  mutate(age = as.numeric(age)) %>%  # force age to be numeric
+  mutate(age = case_when(            # replace extreme ages with NA
+    age < 1 ~ NA_real_,
+    age > 100 ~ NA_real_,
+    TRUE ~ age
+  ))
   
-
+# pivot candy columns to rows
 candy_2015 <- candy_2015 %>% 
-  pivot_longer(cols = 4:97,
+  pivot_longer(cols = 4:97, # the candy columns
                names_to = "candy",
-               values_to = "feeling")
+               values_to = "rating")
 
-view(candy_2015)
-glimpse(candy_2015)
 
-  
+
+
+
+
+
