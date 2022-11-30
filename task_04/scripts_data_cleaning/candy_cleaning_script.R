@@ -6,6 +6,7 @@ view(candy_2015)
 glimpse(candy_2015)
 
 ## 2015 data
+
 # read in data and clean variable names
 candy_2015 <- read_excel("data_raw/boing-boing-candy-2015.xlsx") %>% 
   select(1:96, 115) %>% # remove unwanted columns
@@ -25,7 +26,7 @@ candy_2015 <- candy_2015 %>%
          "joy_joy_mit_iodine!" = "joy_joy_mit_iodine", 
          "licorice_yes_black" = "licorice")
 
-## age
+# age
 candy_2015 <- candy_2015 %>% 
   mutate(age = as.numeric(age)) %>%  # force age to be numeric
   mutate(age = case_when(            # replace extreme ages with NA
@@ -41,8 +42,43 @@ candy_2015 <- candy_2015 %>%
                values_to = "rating")
 
 
+## 2016 data
+
+# read in data and clean variable names
+candy_2016 <- read_excel("data_raw/boing-boing-candy-2016.xlsx") %>% 
+  select(1:5, 7:11, 13:78, 80:106) %>% # remove unwanted columns
+  clean_names()
+
+# extract year from timestamp column then remove timestamp
+candy_2016 <- candy_2016 %>% 
+  mutate(year = str_sub(timestamp, start = 1, end = 4), .before = timestamp) %>% 
+  select(-timestamp)
+
+# rename columns
+candy_2016 <- candy_2016 %>% 
+  rename("going_out?" = "are_you_going_actually_going_trick_or_treating_yourself",
+         "independent_m_ms" = "third_party_m_ms", 
+         "gender" = "your_gender", 
+         "age" = "how_old_are_you",
+         "country" = "which_country_do_you_live_in")
+
+# age
+candy_2016 <- candy_2016 %>% 
+  mutate(age = as.numeric(age)) %>%  # force age to be numeric
+  mutate(age = case_when(            # replace extreme ages with NA
+    age < 1 ~ NA_real_,
+    age > 100 ~ NA_real_,
+    TRUE ~ age
+  ))
+
+# gender
+candy_2016 <- candy_2016 %>% 
+  mutate(gender = case_when(
+    gender == "" ~ NA_character_, # replace blank values with NA
+    TRUE ~ gender
+  ))
 
 
 
-
-
+view(candy_2016)
+glimpse(candy_2016)
