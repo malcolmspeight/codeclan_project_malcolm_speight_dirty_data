@@ -81,7 +81,7 @@ candy_2016 <- candy_2016 %>%
 # country - clean country values
 candy_2016 <- candy_2016 %>% 
   mutate(country = str_to_title(country)) %>% 
-  mutate(country_new = case_when(
+  mutate(country = case_when(
     str_detect(country, "(?i)us") ~ "USA",
     str_detect(country, "(?i)u.s.") ~ "USA",
     str_detect(country, "(?i)usa") ~ "USA",
@@ -124,3 +124,17 @@ candy_2016 <- candy_2016 %>%
     TRUE ~ country
   ), .before = country)
 
+# pivot candy columns to rows
+candy_2016 <- candy_2016 %>% 
+  pivot_longer(cols = 6:103, # the candy columns
+               names_to = "candy",
+               values_to = "rating")
+
+
+
+
+view(candy_2016)
+
+candy_2016 %>% 
+  distinct(country) %>% 
+  print(n = 100)
