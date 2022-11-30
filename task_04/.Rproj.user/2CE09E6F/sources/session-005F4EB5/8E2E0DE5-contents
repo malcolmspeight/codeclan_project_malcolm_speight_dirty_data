@@ -66,52 +66,6 @@ candy_2016 <- candy_2016 %>%
                values_to = "rating")
 
 
-# # country - clean country values
-# candy_2016 <- candy_2016 %>% 
-#   mutate(country = str_to_title(country)) %>% 
-#   mutate(country = case_when(
-#     str_detect(country, "(?i)\\bus\\b") ~ "USA",
-#     str_detect(country, "(?i)u.s.") ~ "USA",
-#     str_detect(country, "(?i)\\busa\\b") ~ "USA",
-#     str_detect(country, "(?i)u.s.a.") ~ "USA",
-#     str_detect(country, "(?i)ussa") ~ "USA",
-#     str_detect(country, "(?i)america") ~ "USA",
-#     str_detect(country, "(?i)united state") ~ "USA",
-#     str_detect(country, "(?i)united stetes") ~ "USA",
-#     str_detect(country, "(?i)united sates") ~ "USA",
-#     str_detect(country, "(?i)units states") ~ "USA",
-#     str_detect(country, "(?i)units sates") ~ "USA",
-#     str_detect(country, "(?i)units stetes") ~ "USA",
-#     str_detect(country, "(?i)merica") ~ "USA",
-#     str_detect(country, "(?i)murica") ~ "USA",
-#     str_detect(country, "(?i)trumpistan") ~ "USA",
-#     str_detect(country, "(?i)yoo") ~ "USA",
-#     str_detect(country, "(?i)eua") ~ "USA",
-#     str_detect(country, "(?i)england") ~ "UK",
-#     str_detect(country, "(?i)united kingdom") ~ "UK",
-#     str_detect(country, "(?i)united kindom") ~ "UK",
-#     str_detect(country, "(?i)uk") ~ "UK",
-#     str_detect(country, "(?i)netherlands") ~ "The Netherlands",
-#     str_detect(country, "(?i)españa") ~ "Spain",
-#     str_detect(country, "(?i)korea") ~ "South Korea",
-#     str_detect(country, "(?i)cascadia") ~ NA_character_,
-#     str_detect(country, "(?i)neverland") ~ NA_character_,
-#     str_detect(country, "(?i)this one") ~ NA_character_,
-#     str_detect(country, "(?i)tropical") ~ NA_character_,
-#     str_detect(country, "(?i)one") ~ NA_character_,
-#     str_detect(country, "(?i)somewhere") ~ NA_character_,
-#     str_detect(country, "(?i)god") ~ NA_character_,
-#     str_detect(country, "(?i)above") ~ NA_character_,
-#     str_detect(country, "(?i)denial") ~ NA_character_,
-#     str_detect(country, "3") ~ NA_character_,
-#     str_detect(country, "4") ~ NA_character_,
-#     str_detect(country, "5") ~ NA_character_,
-#     TRUE ~ country
-#   ))
-
-
-
-
 #############################################################################
 ## 2017 data
 
@@ -144,8 +98,6 @@ candy_2017 <- candy_2017 %>%
 
 # join the 3 years of data into one table
 candy_data = bind_rows(candy_2015, candy_2016, candy_2017)
-glimpse(candy_data)
-view(candy_data)
 
 # age
 candy_data <- candy_data %>% 
