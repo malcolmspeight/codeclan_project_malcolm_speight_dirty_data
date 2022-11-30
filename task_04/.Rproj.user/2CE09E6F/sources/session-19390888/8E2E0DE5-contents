@@ -41,8 +41,22 @@ candy_2015 <- candy_2015 %>%
                values_to = "rating")
 
 
+## 2016 data
+view(candy_2016)
+glimpse(candy_2016)
 
+# read in data and clean variable names
+candy_2016 <- read_excel("data_raw/boing-boing-candy-2016.xlsx") %>% 
+  select(1:5, 7:11, 13:78, 80:106) %>% # remove unwanted columns
+  clean_names()
 
+# extract year from timestamp column then remove timestamp
+candy_2016 <- candy_2016 %>% 
+  mutate(year = str_sub(timestamp, start = 1, end = 4), .before = timestamp) %>% 
+  select(-timestamp)
 
+# rename column
+candy_2016 <- candy_2016 %>% 
+  rename("independent_m_ms" = "third_party_m_ms")
 
 
