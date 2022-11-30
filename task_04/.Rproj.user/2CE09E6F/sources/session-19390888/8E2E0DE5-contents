@@ -55,8 +55,20 @@ candy_2016 <- candy_2016 %>%
   mutate(year = str_sub(timestamp, start = 1, end = 4), .before = timestamp) %>% 
   select(-timestamp)
 
-# rename column
+# rename columns
 candy_2016 <- candy_2016 %>% 
-  rename("independent_m_ms" = "third_party_m_ms")
+  rename("going_out?" = "are_you_going_actually_going_trick_or_treating_yourself",
+         "independent_m_ms" = "third_party_m_ms", 
+         "gender" = "your_gender", 
+         "age" = "how_old_are_you",
+         "country" = "which_country_do_you_live_in")
 
+## age
+candy_2016 <- candy_2016 %>% 
+  mutate(age = as.numeric(age)) %>%  # force age to be numeric
+  mutate(age = case_when(            # replace extreme ages with NA
+    age < 1 ~ NA_real_,
+    age > 100 ~ NA_real_,
+    TRUE ~ age
+  ))
 
