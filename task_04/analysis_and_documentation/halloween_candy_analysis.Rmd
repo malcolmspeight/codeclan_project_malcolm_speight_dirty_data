@@ -5,9 +5,20 @@ date: "2022-11-30"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
+<br/> 
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+```{r include = FALSE}
+library(tidyverse)
+options(dplyr.summarise.inform = FALSE)    # suppress "summarise has" grouped output message
+library(here)
+
+candy <- read_csv(here("data_clean/candy_data.csv"))
+```
+
+
 
 # Total number of candy rating across 2015
 candy_2015 %>% 

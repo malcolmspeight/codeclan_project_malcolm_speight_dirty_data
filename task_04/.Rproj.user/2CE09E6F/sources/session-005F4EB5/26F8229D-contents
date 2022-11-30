@@ -1,0 +1,104 @@
+---
+title: "Sea Bird Observation Analysis"
+author: "Malcolm Speight"
+date: "2022-11-28"
+output: html_document
+---
+
+<br/> 
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r include = FALSE}
+library(tidyverse)
+options(dplyr.summarise.inform = FALSE)    # suppress "summarise has" grouped output message
+library(here)
+
+seabirds <- read_csv(here("data_clean/bird_obs.csv"))
+```
+
+##### **Question 1.**
+
+The question asks to find the bird species that was sighted most frequently, regardless of the number of birds actually counted 
+
+The Wandering albatross sensu lato PL2 is the most frequently sighted bird. <br/> 
+
+```{r}
+seabirds %>% 
+  group_by(common_name, scientific_name, species_abbreviation) %>% 
+  summarise(sightings = n()) %>% 
+  arrange(desc(sightings)) %>% 
+  head(1)
+```
+<br/>
+
+##### **Question 2.**
+
+The bird with the highest total count is the Short-tailed shearwater. <br/>
+```{r}
+seabirds %>% 
+  group_by(common_name, scientific_name, species_abbreviation) %>% 
+  summarise(sightings = sum(bird_count)) %>% 
+  arrange(desc(sightings)) %>% 
+  head(1)
+```
+
+<br/>
+
+##### **Question 3.**
+
+As per Question 2 but for sightings above a latitude of -30 degrees, the Wedge-tailed shearwater has the highest count. <br/>
+
+```{r}
+seabirds %>% 
+  filter(latitude > -30) %>% 
+  group_by(common_name, scientific_name, species_abbreviation) %>% 
+  summarise(sightings = sum(bird_count)) %>% 
+  arrange(desc(sightings)) %>% 
+  head(1)
+```
+
+<br/>
+
+##### **Question 4.**
+
+Selecting those birds that had been sighted in groups, allowed the birds who had only ever been sighted on their own to be isolated in the main `seabirds` table, as they didn't occur in the `birds_seen_in_groups` table. <br/>
+
+```{r}
+birds_seen_in_groups <- seabirds %>% 
+  filter(bird_count > 1)
+
+anti_join(seabirds, birds_seen_in_groups, by = "common_name") %>% 
+  filter(bird_count == 1) %>% 
+  distinct() %>% 
+  summarise("seabird types" = n())
+```
+<br/>
+
+##### **Question 5.**
+
+The different types of penguin were identified by looking for the word 'penguin' (be it upper or lower case) anywhere in the bird's common name. <br/>
+
+```{r}
+pattern <- "(?i)penguin"
+
+seabirds %>%
+  mutate(penguin_detect = str_detect(common_name, pattern)) %>% 
+  filter(penguin_detect) %>% 
+  summarise("penguin_sightings" = sum(bird_count))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
