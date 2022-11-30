@@ -24,15 +24,6 @@ candy_2015 <- candy_2015 %>%
          "joy_joy_mit_iodine!" = "joy_joy_mit_iodine", 
          "licorice_yes_black" = "licorice")
 
-# age
-candy_2015 <- candy_2015 %>% 
-  mutate(age = as.numeric(age)) %>%  # force age to be numeric
-  mutate(age = case_when(            # replace extreme ages with NA
-    age < 1 ~ NA_real_,
-    age > 100 ~ NA_real_,
-    TRUE ~ age
-  ))
-  
 # pivot candy columns to rows
 candy_2015 <- candy_2015 %>% 
   pivot_longer(cols = 4:97, # the candy columns
@@ -40,6 +31,13 @@ candy_2015 <- candy_2015 %>%
                values_to = "rating")
 
 
+# add gender and country columns to match 2016 and 2017 to allow union
+candy_2015 <- candy_2015 %>% 
+  mutate(gender = NA_character_, 
+         country = NA_character_)
+
+
+########################################################################
 ## 2016 data
 
 # read in data and clean variable names
@@ -61,68 +59,6 @@ candy_2016 <- candy_2016 %>%
          "age" = "how_old_are_you",
          "country" = "which_country_do_you_live_in")
 
-# age
-candy_2016 <- candy_2016 %>% 
-  mutate(age = as.numeric(age)) %>%  # force age to be numeric
-  mutate(age = case_when(            # replace extreme ages with NA
-    age < 1 ~ NA_real_,
-    age > 100 ~ NA_real_,
-    TRUE ~ age
-  ))
-
-# gender
-candy_2016 <- candy_2016 %>% 
-  mutate(gender = case_when(
-    gender == "" ~ NA_character_, # replace blank values with NA
-    TRUE ~ gender
-  ))
-
-# country - clean country values
-candy_2016 <- candy_2016 %>% 
-  mutate(country = str_to_title(country)) %>% 
-  mutate(country = case_when(
-    str_detect(country, "(?i)us") ~ "USA",
-    str_detect(country, "(?i)u.s.") ~ "USA",
-    str_detect(country, "(?i)usa") ~ "USA",
-    str_detect(country, "(?i)u.s.a.") ~ "USA",
-    str_detect(country, "(?i)ussa") ~ "USA",
-    str_detect(country, "(?i)america") ~ "USA",
-    str_detect(country, "(?i)united state") ~ "USA",
-    str_detect(country, "(?i)united stetes") ~ "USA",
-    str_detect(country, "(?i)united sates") ~ "USA",
-    str_detect(country, "(?i)units states") ~ "USA",
-    str_detect(country, "(?i)units sates") ~ "USA",
-    str_detect(country, "(?i)units stetes") ~ "USA",
-    str_detect(country, "(?i)merica") ~ "USA",
-    str_detect(country, "(?i)murica") ~ "USA",
-    str_detect(country, "(?i)trumpistan") ~ "USA",
-    str_detect(country, "(?i)yoo") ~ "USA",
-    str_detect(country, "(?i)eua") ~ "USA",
-    str_detect(country, "(?i)england") ~ "UK",
-    str_detect(country, "(?i)united kingdom") ~ "UK",
-    str_detect(country, "(?i)united kindom") ~ "UK",
-    str_detect(country, "(?i)uk") ~ "UK",
-    str_detect(country, "(?i)netherlands") ~ "The Netherlands",
-    str_detect(country, "(?i)españa") ~ "Spain",
-    str_detect(country, "(?i)korea") ~ "South Korea",
-    str_detect(country, "(?i)cascadia") ~ NA_character_,
-    str_detect(country, "(?i)neverland") ~ NA_character_,
-    str_detect(country, "(?i)this one") ~ NA_character_,
-    str_detect(country, "(?i)tropical") ~ NA_character_,
-    str_detect(country, "(?i)one") ~ NA_character_,
-    str_detect(country, "(?i)somewhere") ~ NA_character_,
-    str_detect(country, "(?i)god") ~ NA_character_,
-    str_detect(country, "(?i)above") ~ NA_character_,
-    str_detect(country, "(?i)denial") ~ NA_character_,
-    str_detect(country, "30") ~ NA_character_,
-    str_detect(country, "44") ~ NA_character_,
-    str_detect(country, "45") ~ NA_character_,
-    str_detect(country, "47") ~ NA_character_,
-    str_detect(country, "51") ~ NA_character_,
-    str_detect(country, "54") ~ NA_character_,
-    TRUE ~ country
-  ))
-
 # pivot candy columns to rows
 candy_2016 <- candy_2016 %>% 
   pivot_longer(cols = 6:103, # the candy columns
@@ -130,6 +66,53 @@ candy_2016 <- candy_2016 %>%
                values_to = "rating")
 
 
+# # country - clean country values
+# candy_2016 <- candy_2016 %>% 
+#   mutate(country = str_to_title(country)) %>% 
+#   mutate(country = case_when(
+#     str_detect(country, "(?i)\\bus\\b") ~ "USA",
+#     str_detect(country, "(?i)u.s.") ~ "USA",
+#     str_detect(country, "(?i)\\busa\\b") ~ "USA",
+#     str_detect(country, "(?i)u.s.a.") ~ "USA",
+#     str_detect(country, "(?i)ussa") ~ "USA",
+#     str_detect(country, "(?i)america") ~ "USA",
+#     str_detect(country, "(?i)united state") ~ "USA",
+#     str_detect(country, "(?i)united stetes") ~ "USA",
+#     str_detect(country, "(?i)united sates") ~ "USA",
+#     str_detect(country, "(?i)units states") ~ "USA",
+#     str_detect(country, "(?i)units sates") ~ "USA",
+#     str_detect(country, "(?i)units stetes") ~ "USA",
+#     str_detect(country, "(?i)merica") ~ "USA",
+#     str_detect(country, "(?i)murica") ~ "USA",
+#     str_detect(country, "(?i)trumpistan") ~ "USA",
+#     str_detect(country, "(?i)yoo") ~ "USA",
+#     str_detect(country, "(?i)eua") ~ "USA",
+#     str_detect(country, "(?i)england") ~ "UK",
+#     str_detect(country, "(?i)united kingdom") ~ "UK",
+#     str_detect(country, "(?i)united kindom") ~ "UK",
+#     str_detect(country, "(?i)uk") ~ "UK",
+#     str_detect(country, "(?i)netherlands") ~ "The Netherlands",
+#     str_detect(country, "(?i)españa") ~ "Spain",
+#     str_detect(country, "(?i)korea") ~ "South Korea",
+#     str_detect(country, "(?i)cascadia") ~ NA_character_,
+#     str_detect(country, "(?i)neverland") ~ NA_character_,
+#     str_detect(country, "(?i)this one") ~ NA_character_,
+#     str_detect(country, "(?i)tropical") ~ NA_character_,
+#     str_detect(country, "(?i)one") ~ NA_character_,
+#     str_detect(country, "(?i)somewhere") ~ NA_character_,
+#     str_detect(country, "(?i)god") ~ NA_character_,
+#     str_detect(country, "(?i)above") ~ NA_character_,
+#     str_detect(country, "(?i)denial") ~ NA_character_,
+#     str_detect(country, "3") ~ NA_character_,
+#     str_detect(country, "4") ~ NA_character_,
+#     str_detect(country, "5") ~ NA_character_,
+#     TRUE ~ country
+#   ))
+
+
+
+
+#############################################################################
 ## 2017 data
 
 # read in data and clean variable names
@@ -150,8 +133,22 @@ candy_2017 <- candy_2017 %>%
 candy_2017 <- candy_2017 %>% 
   mutate(year = "2017", .before = "going_out?")
 
-# age
+# pivot candy columns to rows
 candy_2017 <- candy_2017 %>% 
+  pivot_longer(cols = 6:106, # the candy columns
+               names_to = "candy",
+               values_to = "rating")
+
+
+#############################################################################
+
+# join the 3 years of data into one table
+candy_data = bind_rows(candy_2015, candy_2016, candy_2017)
+glimpse(candy_data)
+view(candy_data)
+
+# age
+candy_data <- candy_data %>% 
   mutate(age = as.numeric(age)) %>%  # force age to be numeric
   mutate(age = case_when(            # replace extreme ages with NA
     age < 1 ~ NA_real_,
@@ -160,43 +157,65 @@ candy_2017 <- candy_2017 %>%
   ))
 
 # gender
-candy_2017 <- candy_2017 %>% 
+candy_data <- candy_data %>% 
   mutate(gender = case_when(
     gender == "" ~ NA_character_, # replace blank values with NA
     TRUE ~ gender
   ))
 
 # country - clean country values
-candy_2017 <- candy_2017 %>% 
+candy_data <- candy_data %>% 
   mutate(country = str_to_title(country)) %>% 
-  mutate(new_country = case_when(
-    str_detect(country, "(?i)us") ~ "USA",
-    str_detect(country, "(?i)u.s.") ~ "USA",
-    str_detect(country, "(?i)usa") ~ "USA",
-    str_detect(country, "(?i)u.s.a.") ~ "USA",
+  mutate(country = case_when(
+    str_detect(country, "(?i)\\bus\\b") ~ "USA",
+    str_detect(country, "(?i)\\bu\\bs\\b") ~ "USA",
+    str_detect(country, "(?i)\\bu\\bs") ~ "USA",
+    str_detect(country, "(?i)u\\.s\\.") ~ "USA",
+    str_detect(country, "(?i)\\busa\\b") ~ "USA",
+    str_detect(country, "(?i)u\\.s\\.a\\.") ~ "USA",
     str_detect(country, "(?i)ussa") ~ "USA",
+    str_detect(country, "(?i)usaa") ~ "USA",
+    str_detect(country, "(?i)\\busas\\b") ~ "USA",
+    str_detect(country, "(?i)usausausa") ~ "USA",
     str_detect(country, "(?i)america") ~ "USA",
-    str_detect(country, "(?i)united state") ~ "USA",
-    str_detect(country, "(?i)united stetes") ~ "USA",
-    str_detect(country, "(?i)united sates") ~ "USA",
-    str_detect(country, "(?i)units states") ~ "USA",
-    str_detect(country, "(?i)units sates") ~ "USA",
-    str_detect(country, "(?i)units stetes") ~ "USA",
+    str_detect(country, "(?i)\\bunited s") ~ "USA",
+    str_detect(country, "(?i)\\bunits s") ~ "USA",
+    str_detect(country, "(?i)\\bstates\\b") ~ "USA",
+    str_detect(country, "(?i)alaska") ~ "USA",
+    str_detect(country, "(?i)california") ~ "USA",
+    str_detect(country, "(?i)carolina") ~ "USA",
+    str_detect(country, "(?i)pittsburgh") ~ "USA",
+    str_detect(country, "(?i)jersey") ~ "USA",
+    str_detect(country, "(?i)york") ~ "USA",
     str_detect(country, "(?i)merica") ~ "USA",
     str_detect(country, "(?i)murica") ~ "USA",
+    str_detect(country, "(?i)murrika") ~ "USA",
+    str_detect(country, "(?i)amerca") ~ "USA",
     str_detect(country, "(?i)trumpistan") ~ "USA",
+    str_detect(country, "(?i)insanity") ~ "USA",
     str_detect(country, "(?i)yoo") ~ "USA",
+    str_detect(country, "(?i)ud") ~ "USA",
     str_detect(country, "(?i)eua") ~ "USA",
     str_detect(country, "(?i)england") ~ "UK",
+    str_detect(country, "(?i)scotland") ~ "UK",
     str_detect(country, "(?i)united kingdom") ~ "UK",
     str_detect(country, "(?i)united kindom") ~ "UK",
     str_detect(country, "(?i)uk") ~ "UK",
+    str_detect(country, "(?i)u\\.k\\.") ~ "UK",
+    str_detect(country, "(?i)endland") ~ "UK",
     str_detect(country, "(?i)can") ~ "Canada",
     str_detect(country, "(?i)netherlands") ~ "The Netherlands",
     str_detect(country, "(?i)españa") ~ "Spain",
     str_detect(country, "(?i)korea") ~ "South Korea",
+    str_detect(country, "(?i)uae") ~ "UAE",
+    str_detect(country, "(?i)atlantis") ~ NA_character_,
     str_detect(country, "(?i)cascadia") ~ NA_character_,
+    str_detect(country, "(?i)earth") ~ NA_character_,
+    str_detect(country, "(?i)europe") ~ NA_character_,
     str_detect(country, "(?i)neverland") ~ NA_character_,
+    str_detect(country, "(?i)\\bknow\\b") ~ NA_character_,
+    str_detect(country, "(?i)\\bfear\\b") ~ NA_character_,
+    str_detect(country, "(?i)narnia") ~ NA_character_,
     str_detect(country, "(?i)this one") ~ NA_character_,
     str_detect(country, "(?i)tropical") ~ NA_character_,
     str_detect(country, "(?i)one") ~ NA_character_,
@@ -204,21 +223,11 @@ candy_2017 <- candy_2017 %>%
     str_detect(country, "(?i)god") ~ NA_character_,
     str_detect(country, "(?i)above") ~ NA_character_,
     str_detect(country, "(?i)denial") ~ NA_character_,
+    str_detect(country, "1") ~ NA_character_,
     str_detect(country, "3") ~ NA_character_,
     str_detect(country, "4") ~ NA_character_,
     str_detect(country, "5") ~ NA_character_,
+    str_detect(country, "(?i)\\ba\\b") ~ NA_character_,
     TRUE ~ country
-  ), .before = country)
+  ))
 
-
-#########################
-view(candy_2017)
-glimpse(candy_2017)
-
-candy_2017 %>% 
-  distinct(new_country) %>% 
-  print(n = 300)
-
-candy_2017 %>% 
-  distinct(candy) %>% 
-  print(n = 500)
