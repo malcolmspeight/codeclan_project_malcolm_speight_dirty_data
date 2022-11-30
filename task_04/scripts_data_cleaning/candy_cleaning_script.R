@@ -137,18 +137,28 @@ candy_2017 <- read_excel("data_raw/boing-boing-candy-2017.xlsx") %>%
   select(2:5, 7:11, 13:80, 82:109) %>% # remove unwanted columns
   clean_names()
 
+# remove Excel prefix from names
 names(candy_2017) <- substring(names(candy_2017), 4)
-view(candy_2017)  
+
+# rename columns
+candy_2017 <- candy_2017 %>% 
+  rename("going_out?" = "going_out",
+         "anonymous_brown_globs_that_come_in_black_and_orange_wrappers" = 
+         "anonymous_brown_globs_that_come_in_black_and_orange_wrappers_a_k_a_mary_janes")
+
+# insert year column
+candy_2017 <- candy_2017 %>% 
+  mutate(year = "2017", .before = "going_out?")
+
+
+
+
+
+
+
+#########################
+view(candy_2017)
 glimpse(candy_2017)
-
-# extract year from timestamp column then remove timestamp
-candy_2016 <- candy_2016 %>% 
-  mutate(year = str_sub(timestamp, start = 1, end = 4), .before = timestamp) %>% 
-  select(-timestamp)
-
-
-view(candy_2015)
-glimpse(candy_2016)
 
 candy_2017 %>% 
   distinct(country) %>% 

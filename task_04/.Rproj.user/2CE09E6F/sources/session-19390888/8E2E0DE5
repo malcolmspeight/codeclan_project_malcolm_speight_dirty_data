@@ -3,7 +3,7 @@
     "path": "~/Documents/Malcolm/CodeClan/codeclan_project_malcolm_speight_dirty_data/task_04/scripts_data_cleaning/candy_cleaning_script.R",
     "project_path": "scripts_data_cleaning/candy_cleaning_script.R",
     "type": "r_source",
-    "hash": "3085008911",
+    "hash": "0",
     "contents": "",
     "dirty": true,
     "created": 1669719195295.0,
@@ -13,15 +13,15 @@
         "tempName": "Untitled1",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "152,0",
-        "scrollLine": "142"
+        "cursorPosition": "173,0",
+        "scrollLine": "150"
     },
     "folds": "",
-    "lastKnownWriteTime": 1669824515,
+    "lastKnownWriteTime": 1669825358,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1669825319475,
+    "last_content_update": 1669825442705,
     "read_only": false,
     "read_only_alternatives": []
 }
