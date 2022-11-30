@@ -2,9 +2,6 @@ library(tidyverse)
 library(readxl)
 library(janitor)
 
-view(candy_2015)
-glimpse(candy_2015)
-
 ## 2015 data
 
 # read in data and clean variable names
@@ -21,6 +18,7 @@ candy_2015 <- read_excel("data_raw/boing-boing-candy-2015.xlsx") %>%
 candy_2015 <- candy_2015 %>% 
   rename("age" = "how_old_are_you",
          "going_out?" = "are_you_going_actually_going_trick_or_treating_yourself",
+         "100_grand_bar" = "x100_grand_bar",
          "bonkers_the_candy" = "bonkers", 
          "hershey_s_dark_chocolate" = "dark_chocolate_hershey", 
          "joy_joy_mit_iodine!" = "joy_joy_mit_iodine", 
@@ -57,6 +55,7 @@ candy_2016 <- candy_2016 %>%
 # rename columns
 candy_2016 <- candy_2016 %>% 
   rename("going_out?" = "are_you_going_actually_going_trick_or_treating_yourself",
+         "100_grand_bar" = "x100_grand_bar",
          "independent_m_ms" = "third_party_m_ms", 
          "gender" = "your_gender", 
          "age" = "how_old_are_you",
@@ -131,10 +130,30 @@ candy_2016 <- candy_2016 %>%
                values_to = "rating")
 
 
+## 2017 data
+
+# read in data and clean variable names
+candy_2017 <- read_excel("data_raw/boing-boing-candy-2017.xlsx") %>% 
+  select(2:5, 7:11, 13:80, 82:109) %>% # remove unwanted columns
+  clean_names()
+
+names(candy_2017) <- substring(names(candy_2017), 4)
+view(candy_2017)  
+glimpse(candy_2017)
+
+# extract year from timestamp column then remove timestamp
+candy_2016 <- candy_2016 %>% 
+  mutate(year = str_sub(timestamp, start = 1, end = 4), .before = timestamp) %>% 
+  select(-timestamp)
 
 
-view(candy_2016)
+view(candy_2015)
+glimpse(candy_2016)
+
+candy_2017 %>% 
+  distinct(country) %>% 
+  print(n = 300)
 
 candy_2016 %>% 
-  distinct(country) %>% 
-  print(n = 100)
+  distinct(candy) %>% 
+  print(n = 500)

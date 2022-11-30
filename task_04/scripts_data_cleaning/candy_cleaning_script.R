@@ -2,9 +2,6 @@ library(tidyverse)
 library(readxl)
 library(janitor)
 
-view(candy_2015)
-glimpse(candy_2015)
-
 ## 2015 data
 
 # read in data and clean variable names
@@ -21,6 +18,7 @@ candy_2015 <- read_excel("data_raw/boing-boing-candy-2015.xlsx") %>%
 candy_2015 <- candy_2015 %>% 
   rename("age" = "how_old_are_you",
          "going_out?" = "are_you_going_actually_going_trick_or_treating_yourself",
+         "100_grand_bar" = "x100_grand_bar",
          "bonkers_the_candy" = "bonkers", 
          "hershey_s_dark_chocolate" = "dark_chocolate_hershey", 
          "joy_joy_mit_iodine!" = "joy_joy_mit_iodine", 
@@ -57,6 +55,7 @@ candy_2016 <- candy_2016 %>%
 # rename columns
 candy_2016 <- candy_2016 %>% 
   rename("going_out?" = "are_you_going_actually_going_trick_or_treating_yourself",
+         "100_grand_bar" = "x100_grand_bar",
          "independent_m_ms" = "third_party_m_ms", 
          "gender" = "your_gender", 
          "age" = "how_old_are_you",
@@ -80,11 +79,8 @@ candy_2016 <- candy_2016 %>%
 
 # country - clean country values
 candy_2016 <- candy_2016 %>% 
-  mutate(country = str_to_sentence(country))
-
-candy_2016 <- candy_2016 %>% 
-  mutate(country = str_to_sentence(country)) %>% 
-  mutate(country_new = case_when(
+  mutate(country = str_to_title(country)) %>% 
+  mutate(country = case_when(
     str_detect(country, "(?i)us") ~ "USA",
     str_detect(country, "(?i)u.s.") ~ "USA",
     str_detect(country, "(?i)usa") ~ "USA",
@@ -92,20 +88,32 @@ candy_2016 <- candy_2016 %>%
     str_detect(country, "(?i)ussa") ~ "USA",
     str_detect(country, "(?i)america") ~ "USA",
     str_detect(country, "(?i)united state") ~ "USA",
+    str_detect(country, "(?i)united stetes") ~ "USA",
+    str_detect(country, "(?i)united sates") ~ "USA",
     str_detect(country, "(?i)units states") ~ "USA",
     str_detect(country, "(?i)units sates") ~ "USA",
     str_detect(country, "(?i)units stetes") ~ "USA",
     str_detect(country, "(?i)merica") ~ "USA",
     str_detect(country, "(?i)murica") ~ "USA",
     str_detect(country, "(?i)trumpistan") ~ "USA",
+    str_detect(country, "(?i)yoo") ~ "USA",
+    str_detect(country, "(?i)eua") ~ "USA",
     str_detect(country, "(?i)england") ~ "UK",
     str_detect(country, "(?i)united kingdom") ~ "UK",
+    str_detect(country, "(?i)united kindom") ~ "UK",
     str_detect(country, "(?i)uk") ~ "UK",
+    str_detect(country, "(?i)netherlands") ~ "The Netherlands",
     str_detect(country, "(?i)españa") ~ "Spain",
+    str_detect(country, "(?i)korea") ~ "South Korea",
     str_detect(country, "(?i)cascadia") ~ NA_character_,
     str_detect(country, "(?i)neverland") ~ NA_character_,
     str_detect(country, "(?i)this one") ~ NA_character_,
     str_detect(country, "(?i)tropical") ~ NA_character_,
+    str_detect(country, "(?i)one") ~ NA_character_,
+    str_detect(country, "(?i)somewhere") ~ NA_character_,
+    str_detect(country, "(?i)god") ~ NA_character_,
+    str_detect(country, "(?i)above") ~ NA_character_,
+    str_detect(country, "(?i)denial") ~ NA_character_,
     str_detect(country, "30") ~ NA_character_,
     str_detect(country, "44") ~ NA_character_,
     str_detect(country, "45") ~ NA_character_,
@@ -115,13 +123,37 @@ candy_2016 <- candy_2016 %>%
     TRUE ~ country
   ), .before = country)
 
-view(candy_2016)
+# pivot candy columns to rows
+candy_2016 <- candy_2016 %>% 
+  pivot_longer(cols = 6:103, # the candy columns
+               names_to = "candy",
+               values_to = "rating")
+
+
+## 2017 data
+
+# read in data and clean variable names
+candy_2017 <- read_excel("data_raw/boing-boing-candy-2017.xlsx") %>% 
+  select(2:5, 7:11, 13:80, 82:109) %>% # remove unwanted columns
+  clean_names()
+
+names(candy_2017) <- substring(names(candy_2017), 4)
+view(candy_2017)  
+glimpse(candy_2017)
+
+# extract year from timestamp column then remove timestamp
+candy_2016 <- candy_2016 %>% 
+  mutate(year = str_sub(timestamp, start = 1, end = 4), .before = timestamp) %>% 
+  select(-timestamp)
+
+
+view(candy_2015)
 glimpse(candy_2016)
 
-candy_2016 %>%
-  distinct(country_new) %>% 
-  print(n = 75)
+candy_2017 %>% 
+  distinct(country) %>% 
+  print(n = 300)
 
 candy_2016 %>% 
-  n <- distinct(country_new) %>% 
-  print(nrow(n))
+  distinct(candy) %>% 
+  print(n = 500)
