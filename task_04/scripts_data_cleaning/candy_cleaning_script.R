@@ -78,7 +78,50 @@ candy_2016 <- candy_2016 %>%
     TRUE ~ gender
   ))
 
+# country - clean country values
+candy_2016 <- candy_2016 %>% 
+  mutate(country = str_to_sentence(country))
 
+candy_2016 <- candy_2016 %>% 
+  mutate(country = str_to_sentence(country)) %>% 
+  mutate(country_new = case_when(
+    str_detect(country, "(?i)us") ~ "USA",
+    str_detect(country, "(?i)u.s.") ~ "USA",
+    str_detect(country, "(?i)usa") ~ "USA",
+    str_detect(country, "(?i)u.s.a.") ~ "USA",
+    str_detect(country, "(?i)ussa") ~ "USA",
+    str_detect(country, "(?i)america") ~ "USA",
+    str_detect(country, "(?i)united state") ~ "USA",
+    str_detect(country, "(?i)units states") ~ "USA",
+    str_detect(country, "(?i)units sates") ~ "USA",
+    str_detect(country, "(?i)units stetes") ~ "USA",
+    str_detect(country, "(?i)merica") ~ "USA",
+    str_detect(country, "(?i)murica") ~ "USA",
+    str_detect(country, "(?i)trumpistan") ~ "USA",
+    str_detect(country, "(?i)england") ~ "UK",
+    str_detect(country, "(?i)united kingdom") ~ "UK",
+    str_detect(country, "(?i)uk") ~ "UK",
+    str_detect(country, "(?i)españa") ~ "Spain",
+    str_detect(country, "(?i)cascadia") ~ NA_character_,
+    str_detect(country, "(?i)neverland") ~ NA_character_,
+    str_detect(country, "(?i)this one") ~ NA_character_,
+    str_detect(country, "(?i)tropical") ~ NA_character_,
+    str_detect(country, "30") ~ NA_character_,
+    str_detect(country, "44") ~ NA_character_,
+    str_detect(country, "45") ~ NA_character_,
+    str_detect(country, "47") ~ NA_character_,
+    str_detect(country, "51") ~ NA_character_,
+    str_detect(country, "54") ~ NA_character_,
+    TRUE ~ country
+  ), .before = country)
 
 view(candy_2016)
 glimpse(candy_2016)
+
+candy_2016 %>%
+  distinct(country_new) %>% 
+  print(n = 75)
+
+candy_2016 %>% 
+  n <- distinct(country_new) %>% 
+  print(nrow(n))
