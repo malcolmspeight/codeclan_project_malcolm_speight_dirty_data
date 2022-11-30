@@ -1,0 +1,2 @@
+"0","candy %>% "
+"0","  summarise(no_of_ratings = sum(!is.na(rating)))"

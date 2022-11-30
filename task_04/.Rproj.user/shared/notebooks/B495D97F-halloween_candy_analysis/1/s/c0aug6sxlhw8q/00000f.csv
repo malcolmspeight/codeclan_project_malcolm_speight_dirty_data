@@ -1,0 +1,7 @@
+"0","candy <- candy %>% "
+"0","  mutate(rating_val = case_when("
+"0","    rating == ""JOY"" ~ 1,"
+"0","    rating == ""DESPAIR"" ~ -1,"
+"0","    TRUE ~ 0"
+"0","  ), .after = ""rating"")"
+"0","view(candy)"

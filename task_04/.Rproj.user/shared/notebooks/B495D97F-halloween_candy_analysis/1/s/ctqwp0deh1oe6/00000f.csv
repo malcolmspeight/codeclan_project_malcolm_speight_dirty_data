@@ -1,0 +1,6 @@
+"0","candy %>% "
+"0","  filter(rating == ""DESPAIR"") %>% "
+"0","  group_by(candy) %>% "
+"0","  summarise(count_of_DESPAIR = n()) %>% "
+"0","  arrange(desc(count_of_DESPAIR)) %>% "
+"0","  head(1)"

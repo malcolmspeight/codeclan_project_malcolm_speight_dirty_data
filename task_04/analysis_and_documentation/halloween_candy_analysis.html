@@ -357,49 +357,172 @@ display: none;
 </div>
 
 
-<div id="total-number-of-candy-rating-across-2015" class="section level1">
-<h1>Total number of candy rating across 2015</h1>
-<p>candy_2015 %&gt;% summarise(no_of_ratings = sum(!is.na(rating)))</p>
+<p><br /></p>
+<div id="question-1." class="section level5">
+<h5><strong>Question 1.</strong></h5>
+<p>Total number of candy rating across all years.</p>
+<pre class="r"><code>candy %&gt;% 
+  summarise(no_of_ratings = sum(!is.na(rating)))</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   no_of_ratings
+##           &lt;int&gt;
+## 1        761978</code></pre>
+<p><br /></p>
 </div>
-<div id="avg-age-of-those-going-out" class="section level1">
-<h1>avg age of those going out</h1>
-<p>candy_2015 %&gt;% filter(<code>going_out?</code> == “Yes”) %&gt;%
-summarise(going_out_avg_age = mean(age))</p>
+<div id="question-2." class="section level5">
+<h5><strong>Question 2.</strong></h5>
+<p>Average age of those going out</p>
+<pre class="r"><code>candy %&gt;% 
+  filter(`going_out?` == &quot;Yes&quot;) %&gt;% 
+  summarise(going_out_avg_age = mean(age, na.rm = TRUE))</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   going_out_avg_age
+##               &lt;dbl&gt;
+## 1              35.1</code></pre>
+<p><br /></p>
 </div>
-<div id="avg-age-of-those-not-going-out" class="section level1">
-<h1>avg age of those not going out</h1>
-<p>candy_2015 %&gt;% filter(<code>going_out?</code> == “No”) %&gt;%
-summarise(not_going_out_avg_age = mean(age))</p>
+<div id="question-3." class="section level5">
+<h5><strong>Question 3.</strong></h5>
+<p>Average age of those not going out</p>
+<pre class="r"><code>candy %&gt;% 
+  filter(`going_out?` == &quot;No&quot;) %&gt;% 
+  summarise(not_going_out_avg_age = mean(age, na.rm = TRUE))</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   not_going_out_avg_age
+##                   &lt;dbl&gt;
+## 1                  39.2</code></pre>
+<p><br /></p>
 </div>
-<div id="for-each-joy-despair-and-meh-which-candy-bar-received-the-most" class="section level1">
-<h1>for each joy, despair and meh, which candy bar received the
-most</h1>
-<p>candy_2015 %&gt;% filter(rating == “JOY”) %&gt;% group_by(candy)
-%&gt;% summarise(count_of_joy = n()) %&gt;% arrange(desc(count_of_joy))
-%&gt;% head(1)</p>
+<div id="question-4." class="section level5">
+<h5><strong>Question 4.</strong></h5>
+<p>For each joy, despair and meh, which candy bar received the most.
+<br /></p>
+<div id="joy" class="section level6">
+<h6>JOY</h6>
+<pre class="r"><code>candy %&gt;% 
+  filter(rating == &quot;JOY&quot;) %&gt;% 
+  group_by(candy) %&gt;% 
+  summarise(count_of_JOY = n()) %&gt;% 
+  arrange(desc(count_of_JOY)) %&gt;% 
+  head(1)</code></pre>
+<pre><code>## # A tibble: 1 × 2
+##   candy                    count_of_JOY
+##   &lt;chr&gt;                           &lt;int&gt;
+## 1 any_full_sized_candy_bar         7589</code></pre>
+<p><br /></p>
 </div>
-<div id="how-many-people-rated-starburst-as-despair" class="section level1">
-<h1>how many people rated Starburst as despair?</h1>
-<p>pattern &lt;- “(?i)starburst” candy_2015 %&gt;%
-mutate(starburst_detect = str_detect(candy, pattern)) %&gt;%
-filter(starburst_detect &amp; rating == “DESPAIR”) %&gt;%
-summarise(starburst_despair = n())</p>
+<div id="despair" class="section level6">
+<h6>DESPAIR</h6>
+<pre class="r"><code>candy %&gt;% 
+  filter(rating == &quot;DESPAIR&quot;) %&gt;% 
+  group_by(candy) %&gt;% 
+  summarise(count_of_DESPAIR = n()) %&gt;% 
+  arrange(desc(count_of_DESPAIR)) %&gt;% 
+  head(1)</code></pre>
+<pre><code>## # A tibble: 1 × 2
+##   candy             count_of_DESPAIR
+##   &lt;chr&gt;                        &lt;int&gt;
+## 1 broken_glow_stick             7905</code></pre>
+<p><br /></p>
 </div>
-<div id="without-the-string-detect" class="section level1">
-<h1>without the string detect</h1>
-<p>candy_2015 %&gt;% filter(candy == “starburst” &amp; rating == “JOY”)
-%&gt;% summarise(starburst_despair = n())</p>
+<div id="meh" class="section level6">
+<h6>MEH</h6>
+<pre class="r"><code>candy %&gt;% 
+  filter(rating == &quot;MEH&quot;) %&gt;% 
+  group_by(candy) %&gt;% 
+  summarise(count_of_MEH = n()) %&gt;% 
+  arrange(desc(count_of_MEH)) %&gt;% 
+  head(1)</code></pre>
+<pre><code>## # A tibble: 1 × 2
+##   candy     count_of_MEH
+##   &lt;chr&gt;            &lt;int&gt;
+## 1 lollipops         1570</code></pre>
+<p><br /></p>
 </div>
-<div id="value-of-ratings" class="section level1">
-<h1>value of ratings</h1>
-<p>candy_2015 &lt;- candy_2015 %&gt;% mutate(rating_val = case_when(
-rating == “JOY” ~ 1, rating == “DESPAIR” ~ -1, TRUE ~ 0 ))</p>
 </div>
-<div id="most-popular-candy-bar" class="section level1">
-<h1>most popular candy bar</h1>
-<p>candy_2015 %&gt;% group_by(year, candy) %&gt;% summarise(rating_value
-= sum(rating_val)) %&gt;% arrange(desc(rating_value)) %&gt;%
-slice_max(rating_value) # or head(1)</p>
+<div id="question-5." class="section level5">
+<h5><strong>Question 5.</strong></h5>
+<p>How many people rated Starburst as despair?</p>
+<pre class="r"><code>candy %&gt;% 
+  filter(candy == &quot;starburst&quot; &amp; rating == &quot;DESPAIR&quot;) %&gt;% 
+  summarise(starburst_despair = n())</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   starburst_despair
+##               &lt;int&gt;
+## 1              1990</code></pre>
+<p><br /></p>
+</div>
+<div id="question-6." class="section level5">
+<h5><strong>Question 6.</strong></h5>
+<p>Value of ratings</p>
+<pre class="r"><code>candy &lt;- candy %&gt;% 
+  mutate(rating_val = case_when(
+    rating == &quot;JOY&quot; ~ 1,
+    rating == &quot;DESPAIR&quot; ~ -1,
+    TRUE ~ 0
+  ), .after = &quot;rating&quot;)
+view(candy)</code></pre>
+<p><br /> Most popular candy bar for each gender</p>
+<pre class="r"><code>candy %&gt;% 
+  group_by(gender, candy) %&gt;% 
+  summarise(rating_value = sum(rating_val)) %&gt;% 
+  arrange(desc(rating_value)) %&gt;% 
+  slice_max(rating_value) </code></pre>
+<pre><code>## # A tibble: 5 × 3
+## # Groups:   gender [5]
+##   gender             candy                    rating_value
+##   &lt;chr&gt;              &lt;chr&gt;                           &lt;dbl&gt;
+## 1 Female             any_full_sized_candy_bar          875
+## 2 I&#39;d rather not say any_full_sized_candy_bar           68
+## 3 Male               any_full_sized_candy_bar         1584
+## 4 Other              any_full_sized_candy_bar           37
+## 5 &lt;NA&gt;               any_full_sized_candy_bar         4618</code></pre>
+<p><br /></p>
+</div>
+<div id="question-7." class="section level5">
+<h5><strong>Question 7.</strong></h5>
+<p>Most popular candy bar for each year</p>
+<pre class="r"><code>candy %&gt;% 
+  group_by(year, candy) %&gt;% 
+  summarise(rating_value = sum(rating_val)) %&gt;% 
+  arrange(desc(rating_value)) %&gt;% 
+  slice_max(rating_value) </code></pre>
+<pre><code>## # A tibble: 3 × 3
+## # Groups:   year [3]
+##    year candy                    rating_value
+##   &lt;dbl&gt; &lt;chr&gt;                           &lt;dbl&gt;
+## 1  2015 any_full_sized_candy_bar         4603
+## 2  2016 any_full_sized_candy_bar         1037
+## 3  2017 any_full_sized_candy_bar         1542</code></pre>
+<p><br /></p>
+</div>
+<div id="question-8." class="section level5">
+<h5><strong>Question 8.</strong></h5>
+<p>Most popular candy bar in USA, Canada and UK</p>
+<pre class="r"><code>candy %&gt;% 
+  filter(country %in% c(&quot;USA&quot;, &quot;Canada&quot;, &quot;UK&quot;)) %&gt;% 
+  group_by(country, candy) %&gt;% 
+  summarise(rating_value = sum(rating_val)) %&gt;% 
+  slice_max(rating_value) %&gt;% 
+  arrange(desc(rating_value))</code></pre>
+<pre><code>## # A tibble: 3 × 3
+## # Groups:   country [3]
+##   country candy                               rating_value
+##   &lt;chr&gt;   &lt;chr&gt;                                      &lt;dbl&gt;
+## 1 USA     any_full_sized_candy_bar                    2173
+## 2 Canada  any_full_sized_candy_bar                     253
+## 3 UK      cash_or_other_forms_of_legal_tender           34</code></pre>
+<p><br /> Most popular candy bar in all other countries</p>
+<pre class="r"><code>candy %&gt;% 
+  filter(!country %in% c(&quot;USA&quot;, &quot;Canada&quot;, &quot;UK&quot;)) %&gt;% 
+  group_by(candy) %&gt;% 
+  summarise(rating_value = sum(rating_val)) %&gt;% 
+  slice_max(rating_value) %&gt;% 
+  arrange(desc(rating_value))</code></pre>
+<pre><code>## # A tibble: 1 × 2
+##   candy                    rating_value
+##   &lt;chr&gt;                           &lt;dbl&gt;
+## 1 any_full_sized_candy_bar         4723</code></pre>
 </div>
 
 
