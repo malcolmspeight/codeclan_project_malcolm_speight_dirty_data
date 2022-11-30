@@ -231,3 +231,5 @@ candy_data <- candy_data %>%
     TRUE ~ country
   ))
 
+# write data to clean data folder
+write_csv(candy_data, "data_clean/candy_data.csv")
