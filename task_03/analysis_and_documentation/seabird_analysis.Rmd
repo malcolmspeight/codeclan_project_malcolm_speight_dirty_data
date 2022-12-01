@@ -22,7 +22,7 @@ seabirds <- read_csv(here("data_clean/bird_obs.csv"))
 
 ##### **Dataset**
 
-The data for this task relates to 12,000 records of bird sightings made at sea, between 1975 and 1988. 
+The data for this task relates to 12,000 ship records of some 49,000 bird sightings made at sea, between 1975 and 1988. 
 
 The dataset is split into two, one relating to the birds and another for the ship from which the birds were sighted. 
 
