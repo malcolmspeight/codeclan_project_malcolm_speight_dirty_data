@@ -14,7 +14,7 @@ library(tidyverse)
 options(dplyr.summarise.inform = FALSE)    # suppress "summarise has" grouped output message
 library(here)
 
-decathlon <- read_csv(here("data_clean/decathlon_clean"))
+decathlon <- read_csv(here("data_clean/decathlon_clean.csv"))
 ```
 <br/> 
 

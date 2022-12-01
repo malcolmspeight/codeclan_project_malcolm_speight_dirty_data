@@ -18,7 +18,7 @@ decathlon_data <- decathlon_data %>%
   mutate(athlete = str_to_title(athlete))
 
 # write data to clean data folder 
-write_csv(decathlon_data, "data_clean/decathlon_clean")
+write_csv(decathlon_data, "data_clean/decathlon_clean.csv")
 
 
 
