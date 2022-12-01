@@ -454,7 +454,7 @@ display: none;
 </div>
 <div id="question-6." class="section level5">
 <h5><strong>Question 6.</strong></h5>
-<p>Value of ratings</p>
+<p>Add new column to table to capture the value of each rating</p>
 <pre class="r"><code>candy &lt;- candy %&gt;% 
   mutate(rating_val = case_when(
     rating == &quot;JOY&quot; ~ 1,
