@@ -445,11 +445,11 @@ display: none;
 <p>How many people rated Starburst as despair?</p>
 <pre class="r"><code>candy %&gt;% 
   filter(candy == &quot;starburst&quot; &amp; rating == &quot;DESPAIR&quot;) %&gt;% 
-  summarise(starburst_despair = n())</code></pre>
+  summarise(starburst_despair_count = n())</code></pre>
 <pre><code>## # A tibble: 1 × 1
-##   starburst_despair
-##               &lt;int&gt;
-## 1              1990</code></pre>
+##   starburst_despair_count
+##                     &lt;int&gt;
+## 1                    1990</code></pre>
 <p><br /></p>
 </div>
 <div id="question-6." class="section level5">
@@ -460,8 +460,7 @@ display: none;
     rating == &quot;JOY&quot; ~ 1,
     rating == &quot;DESPAIR&quot; ~ -1,
     TRUE ~ 0
-  ), .after = &quot;rating&quot;)
-view(candy)</code></pre>
+  ), .after = &quot;rating&quot;)</code></pre>
 <p><br /> Most popular candy bar for each gender</p>
 <pre class="r"><code>candy %&gt;% 
   group_by(gender, candy) %&gt;% 

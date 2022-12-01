@@ -98,7 +98,7 @@ candy %>%
 
 ##### **Question 6.**
 
-Value of ratings
+Add new column to table to capture the value of each rating
 ```{r}
 candy <- candy %>% 
   mutate(rating_val = case_when(
