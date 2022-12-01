@@ -1,6 +1,0 @@
-"0","pattern <- ""(?i)penguin"""
-"0",""
-"0","seabirds %>%"
-"0","  mutate(penguin_detect = str_detect(common_name, pattern)) %>% "
-"0","  filter(penguin_detect) %>% "
-"0","  summarise(""penguin_sightings"" = sum(bird_count))"

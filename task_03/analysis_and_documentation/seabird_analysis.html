@@ -358,6 +358,49 @@ display: none;
 
 
 <p><br /></p>
+<p><br /></p>
+<div id="dataset" class="section level5">
+<h5><strong>Dataset</strong></h5>
+<p>The data for this task relates to 12,000 records of bird sightings
+made at sea, between 1975 and 1988.</p>
+<p>The dataset is split into two, one relating to the birds and another
+for the ship from which the birds were sighted.</p>
+<p>A huge number of entries were made for each record. There were 26
+available categories for each bird sighted and 27 categories recorded
+data relating to the ship.</p>
+<p><br /></p>
+</div>
+<div id="assumptions" class="section level5">
+<h5><strong>Assumptions</strong></h5>
+<p>Not all categories of data were needed. The bird data was reduced to
+5 columns:</p>
+<ul>
+<li>record_id</li>
+<li>common_name</li>
+<li>scientific_name</li>
+<li>species_abbreviation</li>
+<li>bird count</li>
+</ul>
+<p>The ship data was narrowed to 3 columns:</p>
+<ul>
+<li>record_id</li>
+<li>latitude</li>
+<li>longitude</li>
+</ul>
+<p><br /></p>
+</div>
+<div id="cleaning" class="section level5">
+<h5><strong>Cleaning</strong></h5>
+<p>Bird count values of <code>NA</code> were replaced with zeros.</p>
+<pre class="r"><code>birds &lt;- birds %&gt;% 
+  mutate(bird_count = coalesce(bird_count, 0))</code></pre>
+<p>The same process was undertaken for the ship’s latitude and
+longitude.</p>
+<p><br /> The ship and bird data was then joined to form one table which
+could be interrogated.</p>
+<pre class="r"><code>bird_obs &lt;- left_join(birds, ships, by = &quot;record_id&quot;)</code></pre>
+<p><br /></p>
+</div>
 <div id="question-1." class="section level5">
 <h5><strong>Question 1.</strong></h5>
 <p>The question asks to find the bird species that was sighted most
@@ -432,7 +475,7 @@ anti_join(seabirds, birds_seen_in_groups, by = &quot;common_name&quot;) %&gt;%
 <div id="question-5." class="section level5">
 <h5><strong>Question 5.</strong></h5>
 <p>The different types of penguin were identified by looking for the
-word ‘penguin’ (be it upper or lower case) anywhere in the birds common
+word ‘penguin’ (be it upper or lower case) anywhere in the bird’s common
 name. <br /></p>
 <pre class="r"><code>pattern &lt;- &quot;(?i)penguin&quot;
 

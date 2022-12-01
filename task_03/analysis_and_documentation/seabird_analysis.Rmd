@@ -10,13 +10,63 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r include = FALSE}
+```{r, include = FALSE}
 library(tidyverse)
 options(dplyr.summarise.inform = FALSE)    # suppress "summarise has" grouped output message
 library(here)
 
 seabirds <- read_csv(here("data_clean/bird_obs.csv"))
 ```
+
+<br/> 
+
+##### **Dataset**
+
+The data for this task relates to 12,000 records of bird sightings made at sea, between 1975 and 1988. 
+
+The dataset is split into two, one relating to the birds and another for the ship from which the birds were sighted. 
+
+A huge number of entries were made for each record. There were 26 available categories for each bird sighted and 27 categories recorded data relating to the ship. 
+
+<br/> 
+
+##### **Assumptions**
+
+Not all categories of data were needed. The bird data was reduced to 5 columns:
+
+  * record_id
+  * common_name
+  * scientific_name
+  * species_abbreviation
+  * bird count
+
+The ship data was narrowed to 3 columns:
+
+  * record_id
+  * latitude
+  * longitude
+
+<br/> 
+
+##### **Cleaning**
+
+Bird count values of `NA` were replaced with zeros. 
+
+```{r, eval = FALSE}
+birds <- birds %>% 
+  mutate(bird_count = coalesce(bird_count, 0))
+```
+
+The same process was undertaken for the ship's latitude and longitude. 
+
+<br/> 
+The ship and bird data was then joined to form one table which could be interrogated. 
+
+```{r, eval = FALSE}
+bird_obs <- left_join(birds, ships, by = "record_id")
+```
+
+<br/> 
 
 ##### **Question 1.**
 
