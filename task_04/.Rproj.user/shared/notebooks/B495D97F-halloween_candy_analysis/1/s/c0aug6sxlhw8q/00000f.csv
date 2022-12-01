@@ -4,4 +4,3 @@
 "0","    rating == ""DESPAIR"" ~ -1,"
 "0","    TRUE ~ 0"
 "0","  ), .after = ""rating"")"
-"0","view(candy)"
