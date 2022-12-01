@@ -1,0 +1,6 @@
+"0","candy_2015 <- candy_2015 %>% "
+"0","  mutate(year = str_sub(timestamp, start = 1, end = 4), .before = timestamp) %>% "
+"0","  select(-timestamp)"
+"2","Error in candy_2015 %>% mutate(year = str_sub(timestamp, start = 1, end = 4),  : 
+  could not find function ""%>%""
+"

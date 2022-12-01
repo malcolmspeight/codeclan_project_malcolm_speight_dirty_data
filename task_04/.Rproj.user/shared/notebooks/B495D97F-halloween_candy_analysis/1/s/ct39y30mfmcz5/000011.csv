@@ -1,3 +1,0 @@
-"0","candy %>% "
-"0","  filter(`going_out?` == ""No"") %>% "
-"0","  summarise(not_going_out_avg_age = mean(age, na.rm = TRUE))"

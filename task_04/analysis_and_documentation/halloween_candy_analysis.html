@@ -358,6 +358,105 @@ display: none;
 
 
 <p><br /></p>
+<p><br /></p>
+<div id="dataset" class="section level4">
+<h4><strong>Dataset</strong></h4>
+<p>The data for this task relates to Halloween and the value people
+place on the treats they received (or would receive) from
+trick-or-treating.</p>
+<p>Almost 10,000 responses were collected over the 3 years from 2015 to
+2017.</p>
+<p>Respondents were provided with a list of sweety (candy) names and
+asked to rate them as either eliciting ‘joy’ or ‘despair’ if they
+received them on Halloween. A third category (‘meh’) was introduced in
+2016 to record a feeling of indifference to the sweet.</p>
+<p>The gender and location of respondents was captured in 2016 and 2017
+but not in 2015.</p>
+<p><br /></p>
+</div>
+<div id="assumptions" class="section level4">
+<h4><strong>Assumptions</strong></h4>
+<p>Approximately 100 sweet names were included in each annual survey.
+Additional questions were asked about non-sweet matters and the
+responses to these were ignored in my analysis.</p>
+<p>A number of questions were very open-ended and resulted in free-text
+answers; an example question would be “list any items not included above
+that give you JOY”. The responses to these were ignored in my analysis
+as I believed the number of answers was immaterial and the data required
+too much work to extract from the spreadsheet.</p>
+<p><br /></p>
+</div>
+<div id="cleaning" class="section level4">
+<h4><strong>Cleaning</strong></h4>
+<div id="year" class="section level5">
+<h5><em>Year</em></h5>
+<p>The year in each dataset was extracted from the timestamp and the
+timestamp column was then discarded. Note that in 2017 there was no
+timestamp column and the year had to be manually introduced to the
+dataset.</p>
+<pre class="r"><code>candy_2015 &lt;- candy_2015 %&gt;% 
+  mutate(year = str_sub(timestamp, start = 1, end = 4), .before = timestamp) %&gt;% 
+  select(-timestamp)</code></pre>
+<p><br /></p>
+</div>
+<div id="variable-names" class="section level5">
+<h5><em>Variable names</em></h5>
+<p>To align candy names across the 3 datasets, names had to be changed
+in each of the years using the <code>rename()</code> function. Whilst
+reviewing the individual candy names, it became clear some of the data
+related to board games and DVDs. These rows were removed from the data
+set.</p>
+<p>I assumed that in 2015, <code>Bonkers</code> related to a candy and
+<code>licorice</code> was black licorice. The the
+<code>anonymous-brown-globs..</code> in 2017 were different from
+<code>Mary Janes</code> and so removed the Mary Jane suffix.</p>
+<p>Gender and Country variables were added to the 2015 data to match the
+data sets in 2016/17 to allow a union.</p>
+<pre class="r"><code>candy_data = bind_rows(candy_2015, candy_2016, candy_2017)</code></pre>
+<p><br /></p>
+</div>
+<div id="pivot" class="section level5">
+<h5><em>Pivot</em></h5>
+<p>The data for all three data sets was pivoted to reduce the number of
+variables to 7:</p>
+<ul>
+<li>year</li>
+<li>age</li>
+<li>gender</li>
+<li>going_out?</li>
+<li>country</li>
+<li>candy</li>
+<li>rating</li>
+</ul>
+<p><br /></p>
+</div>
+<div id="age" class="section level5">
+<h5><em>Age</em></h5>
+<p>As mean age of respondents was requested, the data-type of the
+<code>age</code> variable was changed from a text string to numeric.</p>
+<p>Also, spurious ages below 1 and above 100 years old were removed and
+replaced with <code>NA</code> values.</p>
+<pre class="r"><code>candy_data &lt;- candy_data %&gt;% 
+  mutate(age = as.numeric(age)) %&gt;%  # force age to be numeric
+  mutate(age = case_when(            # replace extreme ages with NA
+    age &lt; 1 ~ NA_real_,
+    age &gt; 100 ~ NA_real_,
+    TRUE ~ age
+  ))</code></pre>
+<p><br /></p>
+</div>
+<div id="gender" class="section level5">
+<h5><em>Gender</em></h5>
+<p>Blank values for <code>gender</code> were replaced with
+<code>NA</code></p>
+<p><br /></p>
+</div>
+<div id="country" class="section level5">
+<h5><em>Country</em></h5>
+<p>The country data was particularly messy and an assortment of REGEX
+and ‘hard-coding’ was used to clean this variable.</p>
+<p><br /></p>
+</div>
 <div id="question-1." class="section level5">
 <h5><strong>Question 1.</strong></h5>
 <p>Total number of candy rating across all years.</p>
@@ -522,6 +621,7 @@ display: none;
 ##   candy                    rating_value
 ##   &lt;chr&gt;                           &lt;dbl&gt;
 ## 1 any_full_sized_candy_bar         4723</code></pre>
+</div>
 </div>
 
 

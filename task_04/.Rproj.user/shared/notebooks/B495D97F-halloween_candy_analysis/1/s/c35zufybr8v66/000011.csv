@@ -1,6 +1,0 @@
-"0","candy %>% "
-"0","  filter(rating == ""MEH"") %>% "
-"0","  group_by(candy) %>% "
-"0","  summarise(count_of_MEH = n()) %>% "
-"0","  arrange(desc(count_of_MEH)) %>% "
-"0","  head(1)"
