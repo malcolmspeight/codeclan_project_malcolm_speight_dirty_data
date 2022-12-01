@@ -2,14 +2,11 @@ library(tidyverse)
 library(readr)
 library(janitor)
 
-view(decathlon_data)
-glimpse(decathlon_data)
-
 ## Decathlon data
-# read in data, flip existing row names to a new 'athlete' column and clean variable names
+# read in data
 decathlon_data <- read_rds("data_raw/decathlon.rds") %>% 
-  rownames_to_column("athlete") %>% 
-  clean_names()
+  rownames_to_column("athlete") %>% # flip existing row names to a new 'athlete' column
+  clean_names() # clean variable names
 
 # change variable names, data type of 'competition' and format of athlete name values
 decathlon_data <- decathlon_data %>% 
@@ -22,3 +19,8 @@ decathlon_data <- decathlon_data %>%
 
 # write data to clean data folder 
 write_csv(decathlon_data, "data_clean/decathlon_clean")
+
+
+
+
+

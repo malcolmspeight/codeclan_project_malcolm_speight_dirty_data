@@ -1,0 +1,4 @@
+"0","decathlon %>% "
+"0","  group_by(`400m_in_less_50s`) %>% "
+"0","  summarise(avg_points = mean(points)) %>% "
+"0","  arrange(desc(avg_points))"

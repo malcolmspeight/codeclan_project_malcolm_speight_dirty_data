@@ -1,0 +1,5 @@
+"0","decathlon %>% "
+"0","  group_by(competition, athlete) %>% "
+"0","  summarise(shot_put) %>% "
+"0","  slice_max(shot_put, n = 3) %>% "
+"0","  arrange(desc(shot_put))"

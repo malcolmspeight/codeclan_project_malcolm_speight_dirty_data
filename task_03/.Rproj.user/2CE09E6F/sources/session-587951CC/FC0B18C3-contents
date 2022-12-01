@@ -1,0 +1,154 @@
+---
+title: "Sea Bird Observation Analysis"
+author: "Malcolm Speight"
+date: "2022-11-28"
+output: html_document
+---
+
+<br/> 
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include = FALSE}
+library(tidyverse)
+options(dplyr.summarise.inform = FALSE)    # suppress "summarise has" grouped output message
+library(here)
+
+seabirds <- read_csv(here("data_clean/bird_obs.csv"))
+```
+
+<br/> 
+
+##### **Dataset**
+
+The data for this task relates to 12,000 ship records of some 49,000 bird sightings made at sea, between 1975 and 1988. 
+
+The dataset is split into two, one relating to the birds and another for the ship from which the birds were sighted. 
+
+A huge number of entries were made for each record. There were 26 available categories for each bird sighted and 27 categories recorded data relating to the ship. 
+
+<br/> 
+
+##### **Assumptions**
+
+Not all categories of data were needed. The bird data was reduced to 5 columns:
+
+  * record_id
+  * common_name
+  * scientific_name
+  * species_abbreviation
+  * bird count
+
+The ship data was narrowed to 3 columns:
+
+  * record_id
+  * latitude
+  * longitude
+
+<br/> 
+
+##### **Cleaning**
+
+Bird count values of `NA` were replaced with zeros. 
+
+```{r, eval = FALSE}
+birds <- birds %>% 
+  mutate(bird_count = coalesce(bird_count, 0))
+```
+
+The same process was undertaken for the ship's latitude and longitude. 
+
+<br/> 
+The ship and bird data was then joined to form one table which could be interrogated. 
+
+```{r, eval = FALSE}
+bird_obs <- left_join(birds, ships, by = "record_id")
+```
+
+<br/> 
+
+##### **Question 1.**
+
+The question asks to find the bird species that was sighted most frequently, regardless of the number of birds actually counted 
+
+The Wandering albatross sensu lato PL2 is the most frequently sighted bird. <br/> 
+
+```{r}
+seabirds %>% 
+  group_by(common_name, scientific_name, species_abbreviation) %>% 
+  summarise(sightings = n()) %>% 
+  arrange(desc(sightings)) %>% 
+  head(1)
+```
+<br/>
+
+##### **Question 2.**
+
+The bird with the highest total count is the Short-tailed shearwater. <br/>
+```{r}
+seabirds %>% 
+  group_by(common_name, scientific_name, species_abbreviation) %>% 
+  summarise(sightings = sum(bird_count)) %>% 
+  arrange(desc(sightings)) %>% 
+  head(1)
+```
+
+<br/>
+
+##### **Question 3.**
+
+As per Question 2 but for sightings above a latitude of -30 degrees, the Wedge-tailed shearwater has the highest count. <br/>
+
+```{r}
+seabirds %>% 
+  filter(latitude > -30) %>% 
+  group_by(common_name, scientific_name, species_abbreviation) %>% 
+  summarise(sightings = sum(bird_count)) %>% 
+  arrange(desc(sightings)) %>% 
+  head(1)
+```
+
+<br/>
+
+##### **Question 4.**
+
+Selecting those birds that had been sighted in groups, allowed the birds who had only ever been sighted on their own to be isolated in the main `seabirds` table, as they didn't occur in the `birds_seen_in_groups` table. <br/>
+
+```{r}
+birds_seen_in_groups <- seabirds %>% 
+  filter(bird_count > 1)
+
+anti_join(seabirds, birds_seen_in_groups, by = "common_name") %>% 
+  filter(bird_count == 1) %>% 
+  distinct() %>% 
+  summarise("seabird types" = n())
+```
+<br/>
+
+##### **Question 5.**
+
+The different types of penguin were identified by looking for the word 'penguin' (be it upper or lower case) anywhere in the bird's common name. <br/>
+
+```{r}
+pattern <- "(?i)penguin"
+
+seabirds %>%
+  mutate(penguin_detect = str_detect(common_name, pattern)) %>% 
+  filter(penguin_detect) %>% 
+  summarise("penguin_sightings" = sum(bird_count))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+

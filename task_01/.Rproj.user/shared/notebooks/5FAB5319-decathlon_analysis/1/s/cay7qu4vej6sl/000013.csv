@@ -1,0 +1,3 @@
+"0","decathlon %>%"
+"0","  group_by(competition) %>%"
+"0","  summarise(avg_100m_time = mean(`100m`))"

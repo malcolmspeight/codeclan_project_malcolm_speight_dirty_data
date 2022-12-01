@@ -1,0 +1,5 @@
+"0","decathlon %>% "
+"0","  group_by(athlete) %>% "
+"0","  summarise(total_points = sum(points)) %>% "
+"0","  arrange(desc(total_points)) %>% "
+"0","  head(1)"
