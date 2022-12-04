@@ -1,0 +1,5 @@
+"0","cake_ingredients %>% "
+"0","  filter(ingredient == ""Cocoa"") %>% "
+"0","  select(cake, ingredient, amount) %>% "
+"0","  arrange(desc(amount)) %>% "
+"0","  head(3)"

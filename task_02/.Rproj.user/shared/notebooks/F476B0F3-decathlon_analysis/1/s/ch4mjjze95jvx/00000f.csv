@@ -1,0 +1,6 @@
+"0","decathlon %>% "
+"0","  select(athlete, long_jump) %>% "
+"0","  arrange(desc(long_jump)) %>% "
+"0","  head(1)"
+"2","Error in select(., athlete, long_jump) : object 'decathlon' not found
+"

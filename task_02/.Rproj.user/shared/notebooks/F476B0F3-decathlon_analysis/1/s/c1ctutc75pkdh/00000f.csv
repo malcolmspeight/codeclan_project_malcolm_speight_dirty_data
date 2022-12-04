@@ -1,0 +1,7 @@
+"0","library(tidyverse)"
+"0","options(dplyr.summarise.inform = FALSE)    # suppress ""summarise has"" grouped output message"
+"0","library(here)"
+"0",""
+"0","decathlon <- read_csv(here(""data_clean/decathlon_clean.csv""))"
+"2","Error: '/Users/malcolmspeight/Documents/Malcolm/CodeClan/codeclan_project_malcolm_speight_dirty_data/task_02/data_clean/decathlon_clean.csv' does not exist.
+"

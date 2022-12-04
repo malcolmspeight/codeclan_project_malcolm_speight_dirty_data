@@ -1,0 +1,6 @@
+"0","cake_ingredients %>% "
+"0","  mutate(ingredient_used = !is.na(amount)) %>% "
+"0","  group_by(cake) %>% "
+"0","  summarise(ingredient_count = sum(ingredient_used)) %>% "
+"0","  arrange(desc(ingredient_count)) %>% "
+"0","  head(3)"

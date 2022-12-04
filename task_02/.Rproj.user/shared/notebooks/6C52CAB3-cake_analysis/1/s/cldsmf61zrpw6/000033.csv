@@ -1,0 +1,4 @@
+"0","cake_ingredients %>% "
+"0","  filter(cake == ""Sponge"" & measure == ""cup"" & !is.na(amount)) %>% "
+"0","  group_by(cake) %>% "
+"0","  summarise(no_of_cups = sum(amount))"

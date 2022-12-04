@@ -18,4 +18,5 @@ cake_ingredients_and_code <- cake_ingredients_and_code %>%
   relocate(ingredient, .before = amount) %>% 
   clean_names() # clean names 
 
-
+# write data to clean data folder 
+write_csv(cake_ingredients_and_code, "data_clean/cake_ingredients_clean.csv")

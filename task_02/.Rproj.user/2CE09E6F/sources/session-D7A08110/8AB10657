@@ -3,7 +3,7 @@
     "path": "~/Documents/Malcolm/CodeClan/codeclan_project_malcolm_speight_dirty_data/task_02/scripts_data_cleaning/cake_cleaning.R",
     "project_path": "scripts_data_cleaning/cake_cleaning.R",
     "type": "r_source",
-    "hash": "1895503397",
+    "hash": "0",
     "contents": "",
     "dirty": false,
     "created": 1669978268660.0,
@@ -13,15 +13,15 @@
         "tempName": "Untitled1",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "2,0",
+        "cursorPosition": "15,10",
         "scrollLine": "0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1670174728,
+    "lastKnownWriteTime": 1670175285,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1670174728685,
+    "last_content_update": 1670175285602,
     "read_only": false,
     "read_only_alternatives": []
 }
