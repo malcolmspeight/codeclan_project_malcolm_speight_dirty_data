@@ -1,0 +1,250 @@
+---
+title: "Halloween Candy"
+author: "Malcolm Speight"
+date: "2022-11-30"
+output: html_document
+---
+
+<br/> 
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include = FALSE}
+library(tidyverse)
+options(dplyr.summarise.inform = FALSE)    # suppress "summarise has" grouped output message
+library(here)
+
+candy <- read_csv(here("data_clean/candy_data.csv"))
+```
+<br/> 
+
+#### **Dataset**
+
+The data for this task relates to Halloween and the value people place on the treats they received (or would receive) from trick-or-treating.   
+
+Almost 10,000 responses were collected over the 3 years from 2015 to 2017. 
+
+Respondents were provided with a list of sweety (candy) names and asked to rate them as either eliciting 'joy' or 'despair' if they received them on Halloween. A third category ('meh') was introduced in 2016 to record a feeling of indifference to the sweet.
+
+The gender and location of respondents was captured in 2016 and 2017 but not in 2015.
+
+<br/> 
+
+#### **Assumptions**
+
+Approximately 100 sweet names were included in each annual survey. Additional questions were asked about non-sweet matters and the responses to these were ignored in my analysis.
+
+A number of questions were very open-ended and resulted in free-text answers; an example question would be "list any items not included above that give you JOY". The responses to these were ignored in my analysis as I believed the number of answers was immaterial and the data required too much work to extract from the spreadsheet. 
+
+<br/> 
+
+#### **Cleaning**
+
+##### _Year_
+The year in each dataset was extracted from the timestamp and the timestamp column was then discarded. Note that in 2017 there was no timestamp column and the year had to be manually introduced to the dataset.  
+
+```{r, eval = FALSE}
+candy_2015 <- candy_2015 %>% 
+  mutate(year = str_sub(timestamp, start = 1, end = 4), .before = timestamp) %>% 
+  select(-timestamp)
+```
+<br/> 
+
+##### _Variable names_
+
+To align candy names across the 3 datasets, names had to be changed in each of the years using the `rename()` function. Whilst reviewing the individual candy names, it became clear some of the data related to board games and DVDs. These rows were removed from the data set. 
+
+I assumed that in 2015, `Bonkers` related to a candy and `licorice` was black licorice. The the `anonymous-brown-globs..` in 2017 were different from `Mary Janes` and so removed the Mary Jane suffix. 
+
+Gender and Country variables were added to the 2015 data to match the data sets in 2016/17 to allow a union.
+
+```{r, eval = FALSE}
+candy_data = bind_rows(candy_2015, candy_2016, candy_2017)
+```
+
+
+<br/> 
+
+##### _Pivot_
+
+The data for all three data sets was pivoted to reduce the number of variables to 7: 
+
+  * year
+  * age
+  * gender
+  * going_out?
+  * country
+  * candy
+  * rating
+
+<br/> 
+
+##### _Age_
+
+As mean age of respondents was requested, the data-type of the `age` variable was changed from a text string to numeric.
+
+Also, spurious ages below 1 and above 100 years old were removed and replaced with `NA` values.
+
+```{r, eval = FALSE}
+candy_data <- candy_data %>% 
+  mutate(age = as.numeric(age)) %>%  # force age to be numeric
+  mutate(age = case_when(            # replace extreme ages with NA
+    age < 1 ~ NA_real_,
+    age > 100 ~ NA_real_,
+    TRUE ~ age
+  ))
+```
+
+<br/> 
+
+##### _Gender_
+
+Blank values for `gender` were replaced with `NA`
+
+<br/> 
+
+##### _Country_
+
+The country data was particularly messy and an assortment of REGEX and 'hard-coding' was used to clean this variable. 
+
+
+<br/> 
+
+##### **Question 1.**
+
+Total number of candy rating across all years.
+```{r}
+candy %>% 
+  summarise(no_of_ratings = sum(!is.na(rating)))
+```
+<br/>
+
+##### **Question 2.**
+
+Average age of those going out
+```{r}
+candy %>% 
+  filter(`going_out?` == "Yes") %>% 
+  summarise(going_out_avg_age = mean(age, na.rm = TRUE))
+```
+<br/>
+
+##### **Question 3.**
+
+Average age of those not going out
+```{r}
+candy %>% 
+  filter(`going_out?` == "No") %>% 
+  summarise(not_going_out_avg_age = mean(age, na.rm = TRUE))
+```
+<br/>
+
+##### **Question 4.**
+
+For each joy, despair and meh, which candy bar received the most.
+<br/>
+
+###### JOY
+```{r}
+candy %>% 
+  filter(rating == "JOY") %>% 
+  group_by(candy) %>% 
+  summarise(count_of_JOY = n()) %>% 
+  arrange(desc(count_of_JOY)) %>% 
+  head(1)
+```
+<br/>
+
+###### DESPAIR
+```{r}
+candy %>% 
+  filter(rating == "DESPAIR") %>% 
+  group_by(candy) %>% 
+  summarise(count_of_DESPAIR = n()) %>% 
+  arrange(desc(count_of_DESPAIR)) %>% 
+  head(1)
+```
+<br/>
+
+###### MEH
+```{r}
+candy %>% 
+  filter(rating == "MEH") %>% 
+  group_by(candy) %>% 
+  summarise(count_of_MEH = n()) %>% 
+  arrange(desc(count_of_MEH)) %>% 
+  head(1)
+```
+<br/>
+
+##### **Question 5.**
+
+How many people rated Starburst as despair?
+
+```{r}
+candy %>% 
+  filter(candy == "starburst" & rating == "DESPAIR") %>% 
+  summarise(starburst_despair_count = n())
+```
+<br/>
+
+##### **Question 6.**
+
+Add new column to table to capture the value of each rating
+```{r}
+candy <- candy %>% 
+  mutate(rating_val = case_when(
+    rating == "JOY" ~ 1,
+    rating == "DESPAIR" ~ -1,
+    TRUE ~ 0
+  ), .after = "rating")
+```
+
+<br/>
+Most popular candy bar for each gender
+
+```{r}
+candy %>% 
+  group_by(gender, candy) %>% 
+  summarise(rating_value = sum(rating_val)) %>% 
+  arrange(desc(rating_value)) %>% 
+  slice_max(rating_value) 
+```
+
+<br/>
+
+##### **Question 7.**
+
+Most popular candy bar for each year
+```{r}
+candy %>% 
+  group_by(year, candy) %>% 
+  summarise(rating_value = sum(rating_val)) %>% 
+  arrange(desc(rating_value)) %>% 
+  slice_max(rating_value) 
+```
+
+<br/>
+
+##### **Question 8.**
+
+Most popular candy bar in USA, Canada and UK
+```{r}
+candy %>% 
+  filter(country %in% c("USA", "Canada", "UK")) %>% 
+  group_by(country, candy) %>% 
+  summarise(rating_value = sum(rating_val)) %>% 
+  slice_max(rating_value) %>% 
+  arrange(desc(rating_value))
+```
+<br/>
+Most popular candy bar in all other countries
+```{r}
+candy %>% 
+  filter(!country %in% c("USA", "Canada", "UK")) %>% 
+  group_by(candy) %>% 
+  summarise(rating_value = sum(rating_val)) %>% 
+  slice_max(rating_value) %>% 
+  arrange(desc(rating_value))
+```

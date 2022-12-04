@@ -1,0 +1,6 @@
+"0","candy %>% "
+"0","  filter(country %in% c(""USA"", ""Canada"", ""UK"")) %>% "
+"0","  group_by(country, candy) %>% "
+"0","  summarise(rating_value = sum(rating_val)) %>% "
+"0","  slice_max(rating_value) %>% "
+"0","  arrange(desc(rating_value))"
