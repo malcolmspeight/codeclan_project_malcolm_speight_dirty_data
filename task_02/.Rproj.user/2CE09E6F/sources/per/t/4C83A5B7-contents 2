@@ -1,0 +1,132 @@
+---
+title: "Decathlon Data"
+author: "Malcolm Speight"
+date: "2022-12-01"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include = FALSE}
+library(tidyverse)
+options(dplyr.summarise.inform = FALSE)    # suppress "summarise has" grouped output message
+library(here)
+
+decathlon <- read_csv(here("data_clean/decathlon_clean.csv"))
+```
+<br/> 
+
+##### **Dataset**
+
+The data relates to athletes competing in the decathlon over two meetings, Decastar and OlympicG.
+
+Their times and distances are recorded, as is their placing in the competition and the number of points they scored overall. There are 41 records in the dataset. 
+
+<br/> 
+
+##### **Cleaning**
+
+The dataset had row names which recorded the name of the athlete. As the data was read-in, the row names were flipped to become a new variable in the table. 
+
+```{r, eval = FALSE}
+rownames_to_column("athlete") 
+```
+
+A number of amendments to the table variables was made after the data had been read-in:
+
+  * a prefix of "x" was removed from a number variable names
+  * the data type of `competition` was changed from `factor` to `character`
+  * the values within `athlete` were formatted to read properly 
+
+```{r, eval = FALSE}
+decathlon_data <- decathlon_data %>% 
+  rename("100m" = "x100m", 
+         "400m" = "x400m",
+         "110m_hurdle" = "x110m_hurdle",
+         "1500m" = "x1500m") %>% 
+  mutate(competition = as.character(competition)) %>% 
+  mutate(athlete = str_to_title(athlete))
+```
+
+
+<br/> 
+
+##### **Question 1**
+
+The longest long jump in either competition.
+
+```{r}
+decathlon %>% 
+  select(athlete, long_jump) %>% 
+  arrange(desc(long_jump)) %>% 
+  head(1)
+```
+<br/> 
+
+##### **Question 2**
+
+The average 100m time in each competition.
+
+```{r}
+decathlon %>%
+  group_by(competition) %>%
+  summarise(avg_100m_time = mean(`100m`))
+```
+<br/> 
+
+##### **Question 3**
+
+The athlete with the highest total points across both competitions.
+
+```{r}
+decathlon %>% 
+  group_by(athlete) %>% 
+  summarise(total_points = sum(points)) %>% 
+  arrange(desc(total_points)) %>% 
+  head(1)
+```
+<br/> 
+
+##### **Question 4**
+
+The shot-put 1, 2 and 3 from both competitions.
+
+```{r}
+decathlon %>% 
+  group_by(competition, athlete) %>% 
+  summarise(shot_put) %>% 
+  slice_max(shot_put, n = 3) %>% 
+  arrange(desc(shot_put))
+```
+<br/> 
+
+##### **Question 5**
+
+Identifying which competitors ran the 400m in under 50 seconds...
+
+```{r}
+decathlon <- decathlon %>% 
+  mutate("400m_in_less_50s" = case_when(
+    `400m` < 50.0 ~ TRUE, 
+    TRUE ~ FALSE
+  ), .after = `400m`) 
+```
+
+... allows the competitors to be split and their average points calculated. 
+
+```{r}
+decathlon %>% 
+  group_by(`400m_in_less_50s`) %>% 
+  summarise(avg_points = mean(points)) %>% 
+  arrange(desc(avg_points))
+```
+
+
+
+
+
+
+
+

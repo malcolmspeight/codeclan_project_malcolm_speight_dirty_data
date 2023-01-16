@@ -1,0 +1,79 @@
+---
+title: "Cake Ingredients"
+author: "Malcolm Speight"
+date: "2022-12-01"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include = FALSE}
+library(tidyverse)
+options(dplyr.summarise.inform = FALSE)    # suppress "summarise has" grouped output message
+library(here)
+
+cake_ingredients <- read_csv(here("data_clean/cake_ingredients_clean.csv"))
+view(cake_ingredients)
+```
+<br/> 
+
+
+#### Question 1.
+
+```{r}
+cake_ingredients %>% 
+  filter(ingredient == "Cocoa") %>% 
+  select(cake, ingredient, amount) %>% 
+  arrange(desc(amount)) %>% 
+  head(3)
+```
+<br/> 
+
+#### Question 2.
+
+```{r}
+cake_ingredients %>% 
+  filter(cake == "Sponge" & measure == "cup" & !is.na(amount)) %>% 
+  group_by(cake) %>% 
+  summarise(no_of_cups = sum(amount))
+```
+<br/> 
+
+#### Question 3.
+
+```{r}
+cake_ingredients %>% 
+  filter(measure == "teaspoon" & !is.na(amount)) %>% 
+  select(ingredient) %>% 
+  distinct() %>% 
+  nrow()
+```
+
+<br/> 
+
+#### Question 4.
+
+```{r}
+cake_ingredients %>% 
+  mutate(ingredient_used = !is.na(amount)) %>% 
+  group_by(cake) %>% 
+  summarise(ingredient_count = sum(ingredient_used)) %>% 
+  arrange(desc(ingredient_count)) %>% 
+  head(3)
+```
+
+
+
+#### Question 5.
+
+```{r}
+cake_ingredients %>% 
+  mutate(ingredient_used = !is.na(amount)) %>% 
+  group_by(ingredient) %>% 
+  summarise(ingredient_count = sum(ingredient_used)) %>% 
+  filter(ingredient_count == 1)
+```
+
+
